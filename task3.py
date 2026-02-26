@@ -1,4 +1,6 @@
 import sys
+
+
 def parse_log_line(line: str) -> dict:
     parts = line.strip().split(" ", 3)
 
@@ -16,6 +18,7 @@ def parse_log_line(line: str) -> dict:
         "level": level,
         "message": message
     }
+
 
 def load_logs(file_path: str) -> list:
     logs = []
@@ -55,22 +58,21 @@ def display_log_counts(counts: dict):
     for level, count in counts.items():
         print(f"{level:<15} | {count}")
 
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Використання: python task3.py <шлях_до_файлу> [рівень]")
         sys.exit(1)
 
     file_path = sys.argv[1]
-    level = sys.argv[2] if len(sys.argv) > 2 else None
+    level_arg = sys.argv[2] if len(sys.argv) > 2 else None
 
-    logs = load_logs(file_path)
-    counts = count_logs_by_level(logs)
-    display_log_counts(counts)
+    logs_list = load_logs(file_path)
+    counts_dict = count_logs_by_level(logs_list)
+    display_log_counts(counts_dict)
 
-    if level:
-        filtered_logs = filter_logs_by_level(logs, level)
-        print(f"\nДеталі логів для рівня '{level.upper()}':")
+    if level_arg:
+        filtered_logs = filter_logs_by_level(logs_list, level_arg)
+        print(f"\nДеталі логів для рівня '{level_arg.upper()}':")
         for log in filtered_logs:
             print(f"{log['date']} {log['time']} - {log['message']}")
-
-
